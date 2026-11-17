@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TimeTill</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACcUlEQVR4nO1bO3LCMBBdMhluwKRJT01LkyNAwxW4AhUVVa7AFWjgCDS01OnTZHwDGlIkYoSwbGk/3gX0KgwS3vf2rSXZcg8iOCxHZ/94vDr2Ym0tIjX+my/DjiGsC5Eb/0tO59Q2WsDE/xJr+Cy42CE3s+PVkT8aAg7LUVZ7Vwqv2BMO3t6xXU3h6UugCOA+5Axvk3UlEw0BOTH5XIsD/IMUF1jMvkNKbCHHGOFzOKxYJl6H3XxwdTxZV1D9fAMEnKMCPMow5yNVAFHyYWZCSDstFAE9EUpFSPjj86ux/X4xvDqWFkTMAY54G+E2OEG4hAgdICLAbj4gEw+xXwxZRBAVgCvrMXC4QUwAiazHQHFDKADLTLBL8gB/DmsbTVJBFqBr8g5cIpAE0CLvwCFCWQxhO+Zm/7SZYk/VCKoLUAJgyVsUoZMS6M+27P/JJWa2ANQLHzXw02YKp830RlSsCzq7CPoBY0TwiXM6Snw16KM/22aTd+0lyghAcRhMEUIi4yGy1gJcEx+ffB05Stbb1gmd3xCpQ6wUpO1eBxUBfLS5QRpmpsIa5AEMCaAFNQH8jGtlH0D5GqBJ3KGUQE7jybq6uW9vCZh7hcUB2gFoowiQ28HqdQD7rKA4ANPJmgsoT4rQDrAiAvWhaSkBSmdtF3A8Mic7QEsErv0CLCXQtQhc5AHKBomyRUZsn6DFTVIqGyUtbZPLEQBAaMOk1kbJOvK1X3h4qO2yMQGahsHef6e7R4w8QPs84O5FaCLf+EOAuysHL3GNHHPeAr28VmdZjFTiWY1qYPbtUcBzek5Q1WpygkQm2M9HWQ22lQF3mYic7xcdm09YlYDFewAAAABJRU5ErkJggg==">
+
+<style>
+  :root{
+    --bg-1:#0a0b0d;
+    --case-hi:#22262d;
+    --case-lo:#15171c;
+    --case-edge:#000000;
+    --screen:#05060a;
+    --amber:#ffb15a;
+    --amber-soft:#c67d31;
+    --text:#e9e6de;
+    --text-dim:#868c96;
+    --text-faint:#4d5158;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{height:100%;}
+
+  body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 20px;
+    background:var(--bg-1);
+    font-family:'Sora', system-ui, sans-serif;
+    color:var(--text);
+  }
+
+  .clock{
+    width:min(440px, 100%);
+    background:var(--case-lo);
+    border-radius:24px;
+    padding:24px;
+    border:1px solid var(--case-edge);
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 4px 16px;
+  }
+
+  .brand{
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+  }
+
+  .screen{
+    background:var(--screen);
+    border-radius:16px;
+    padding:26px 20px 20px;
+    text-align:center;
+  }
+
+  .screen-label{
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:10px;
+  }
+
+  .readout{
+    font-family:'Digital Numbers', 'Sora', monospace;
+    font-size:3.4rem;
+    line-height:1;
+    color:var(--amber);
+  }
+
+  .readout.is-empty{
+    color:var(--text-faint);
+    text-shadow:none;
+  }
+
+  .readout-sub{
+    margin-top:10px;
+    font-size:12.5px;
+    color:var(--amber-soft);
+    font-weight:500;
+    letter-spacing:.03em;
+    min-height:16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="clock">
+  <div class="topbar">
+    <span class="brand">TimeTill</span>
+  </div>
+
+  <div class="screen">
+    <div class="screen-label">Time remaining</div>
+    <div class="readout is-empty" id="readout">--:--</div>
+    <div class="readout-sub" id="readoutSub"></div>
+  </div>
+
+  <div class="fields">
+    <div class="field">
+      <label for="fromTime">From</label>
+      <input type="time" id="fromTime" step="60">
+    </div>
+    <div class="arrow" aria-hidden="true">&#8594;</div>
+    <div class="field">
+      <label for="toTime">Until</label>
+      <input type="time" id="toTime" step="60">
+    </div>
+  </div>
+
+  <div class="presets">
+    <button class="chip" data-mins="15" type="button">+15m</button>
+    <button class="chip" data-mins="30" type="button">+30m</button>
+    <button class="chip" data-mins="60" type="button">+1h</button>
+    <button class="chip" data-mins="120" type="button">+2h</button>
+  </div>
+
+</div>
+
+<script>
+  (function(){
+    var fromInput = document.getElementById('fromTime');
+    var toInput = document.getElementById('toTime');
+    var readout = document.getElementById('readout');
+
+    function pad(n){ return String(n).padStart(2, '0'); }
+
+    function minsToHM(mins){
+      return pad(Math.floor(mins / 60)) + ':' + pad(mins % 60);
+    }
+
+    // TODO: parse the two inputs, work out the difference and show it in the readout
+    // TODO: wire up the preset chips
+  })();
+</script>
+</body>
+</html>
